@@ -18,71 +18,128 @@ import requests
 
 #MAIN PAGE
 def index(request):
-    pass
+    context = {
+
+    } 
+    return render(request, 'tourism/index.html', context=context)
 
 #REG PAGES
 def registration(requset):
-    pass
+    context = {
+
+    } 
+    return render(request, 'tourism/registration.html', context=context)
 
 def logout(request):
-    pass
+    context = {
+
+    } 
+    return render(request, 'tourism/logout.html', context=context)
 
 
 #STAFF PAGES
 def client(request, user_id):
-    pass
+    context = {
+
+    } 
+    return render(request, 'tourism/client.html', context=context)
 
 def gid(request, user_id):
-    pass
+    context = {
+
+    } 
+    return render(request, 'tourism/gid.html', context=context)
 
 def manager(request, user_id):
-    pass
+    context = {
+
+    } 
+    return render(request, 'tourism/manager.html', context=context)
 
 def director(request, user_id):
-    pass
+    context = {
+
+    } 
+    return render(request, 'tourism/director.html', context=context)
  
 
 #MANAGER
 def recrut_driver(request):
-    pass
+    context = {
+
+    } 
+    return render(request, 'tourism/recrut_driver.html', context=context)
 
 def get_list(request):
-    pass
+    context = {
+
+    } 
+    return render(request, 'tourism/get_list.html', context=context)
 
 def create_excursion(request):
-    pass
+    context = {
+
+    } 
+    return render(request, 'tourism/create_excursion.html', context=context)
 
 def take_gid(request):
-    pass
+    context = {
+
+    } 
+    return render(request, 'tourism/take_gid.html', context=context)
 
 
 #DIRECTOR
 def update_salary(request):
-    pass
+    context = {
+
+    } 
+    return render(request, 'tourism/update_salary.html', context=context)
 
 def remove_staff(request):
-    pass
+    context = {
+
+    } 
+    return render(request, 'tourism/remove_staff.html', context=context)
 
 
 def get_staff_list(request):
-    pass
+    context = {
+
+    } 
+    return render(request, 'tourism/get_staff_list.html', context=context)
 
 def recruit_staff(request):
-    pass
+    context = {
+
+    } 
+    return render(request, 'tourism/recruit_staff.html', context=context)
 
 def update_excursion_price(request):
-    pass
+    context = {
+
+    } 
+    return render(request, 'tourism/update_excursion_price.html', context=context)
 
 def add_service(request):
-    pass
+    context = {
+
+    } 
+    return render(request, 'tourism/add_service.html', context=context)
 
 #GID
 def create_way(request):
-    pass
+    context = {
+
+    } 
+    return render(request, 'tourism/create_way.html', context=context)
 
 #CLIENT
 def order_excursion(request):
-    pass
+    context = {
+
+    } 
+    return render(request, 'tourism/order_excursion.html', context=context)
 
 
 class RecrutDriver(APIView):
