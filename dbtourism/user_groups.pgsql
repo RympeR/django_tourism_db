@@ -5,7 +5,7 @@ CREATE USER tourism_client WITH LOGIN  PASSWORD 'client';
 CREATE USER tourism_guest WITH LOGIN  PASSWORD 'guest';
 
 
-REVOKE ALL on DATABASE tourism_db FROM tourism_developer;m, 
+REVOKE ALL on DATABASE tourism_db FROM tourism_developer;
 REVOKE ALL ON SCHEMA public FROM tourism_developer;
 
 REVOKE CREATE ON SCHEMA public FROM public;

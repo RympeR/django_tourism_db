@@ -6,7 +6,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
-
+from datetime import datetime
 
 class Client(models.Model):
     # Field name made lowercase.
@@ -49,6 +49,7 @@ class KlientRaspisanie(models.Model):
         return self.date + ' :: ' + str(self.id_client) + ' :: ' + str(self.id_excursion)
 
 
+
 class Route(models.Model):
     # Field name made lowercase.
     id_route = models.AutoField(db_column='ID_Route', primary_key=True)
@@ -73,17 +74,17 @@ class Route(models.Model):
         verbose_name_plural = 'Routes'
 
     def __str__(self):
-        return self.route_name
+        return str(self.id_route) + self.route_name
 
 
 class Staff(models.Model):
+    id_staff = models.AutoField(db_column='ID_Staff', primary_key=True)
+    # Field name made lowercase.
     # Field name made lowercase.
     full_name = models.CharField(db_column='Full_name', max_length=90)
     # Field name made lowercase.
-    id_staff = models.AutoField(db_column='ID_Staff', primary_key=True)
-    # Field name made lowercase.
     dolzhnost = models.CharField(db_column='Dolzhnost', max_length=40)
-    employment_date = models.DateField()
+    employment_date = models.DateField(default=datetime.today().strftime('%Y-%m-%d'))
     date_of_dismissal = models.DateField(blank=True, null=True)
     salary = models.TextField()  # This field type is a guess.
     # Field name made lowercase.
@@ -188,7 +189,7 @@ class Excursion(models.Model):
         verbose_name_plural = "Excursion's"
 
     def __str__(self):
-        return str(self.id_excursion)
+        return str(self.id_excursion) + str(self.start_of_route)
 
 
 class Timetable(models.Model):

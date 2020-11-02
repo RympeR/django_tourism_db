@@ -1,25 +1,14 @@
 
-    {% extends 'basics.html' %}
+    {% extends 'base.html' %}
 
     {% block style %}
-    <link rel = "stylesheet" href = "{{ url_for('static',filename='css/Delete_Service.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     {% endblock %}
 {% block title %}Statistics{% endblock title %}
 {% block main_content %}
-    <div class = "intro">
-        <h1>Посмотреть стоимость</h1>
-<div class = "container">
-    <form method="post">
-        <div class = "dws-input">
-        <input type = "text" name = "name" placeholder = "Название услуги:">
-        </div>
-        <button class = "dws-submit2" type = "submit" name = "submit" value = "Report">Обновить список услуг</button>
-        <br />
-        <br />
-        <br />
-        <a class = "restore" href = "/client/{{username}}">Назад</a>
-    </form>
-</div>
-</div>    
+<form action="{% url 'user_insert_api' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Register" class ="btn btn-success">
+</form>  
 {% endblock main_content %}
