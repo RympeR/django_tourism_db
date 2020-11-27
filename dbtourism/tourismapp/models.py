@@ -8,6 +8,7 @@
 from django.db import models
 from datetime import datetime
 
+
 class Client(models.Model):
     # Field name made lowercase.
     contact_details = models.CharField(
@@ -18,6 +19,8 @@ class Client(models.Model):
     date_of_registration = models.DateField(db_column='Date_of_registration')
     # Field name made lowercase.
     id_client = models.AutoField(db_column='ID_Client', primary_key=True)
+    login = models.TextField('login', unique=True, null=False, blank=False)
+    passw = models.TextField('password', unique=True, null=False, blank=False)
 
     class Meta:
         managed = False
@@ -47,7 +50,6 @@ class KlientRaspisanie(models.Model):
 
     def __str__(self):
         return self.date + ' :: ' + str(self.id_client) + ' :: ' + str(self.id_excursion)
-
 
 
 class Route(models.Model):
@@ -84,7 +86,8 @@ class Staff(models.Model):
     full_name = models.CharField(db_column='Full_name', max_length=90)
     # Field name made lowercase.
     dolzhnost = models.CharField(db_column='Dolzhnost', max_length=40)
-    employment_date = models.DateField(default=datetime.today().strftime('%Y-%m-%d'))
+    employment_date = models.DateField(
+        default=datetime.today().strftime('%Y-%m-%d'))
     date_of_dismissal = models.DateField(blank=True, null=True)
     salary = models.TextField()  # This field type is a guess.
     # Field name made lowercase.
@@ -97,6 +100,10 @@ class Staff(models.Model):
     # Field name made lowercase. Field renamed to remove unsuitable characters.
     the_foremost_place_of_work = models.ForeignKey(
         'TranscendingWork', models.DO_NOTHING, db_column='The foremost place of work', blank=True, null=True)
+    login = models.TextField('login', unique=True, null=False, blank=False)
+    passw = models.TextField('password', unique=True, null=False, blank=False)
+    role_user = models.CharField(
+        'role_user',  null=False, blank=False, max_length=30)
 
     class Meta:
         managed = False

@@ -38,9 +38,13 @@ to tourism_guest;
 
 grant select on client_info to tourism_staff;
 
-grant SELECT(client_id, login, passw) ON TABLE client
+grant SELECT("ID_Client", login, passw) ON TABLE "Client"
 to tourism_guest;
 
+grant SELECT("ID_Staff", login, passw, role_user) ON TABLE "Staff"
+to tourism_staff;
+grant SELECT("ID_Staff", login, passw, role_user) ON TABLE "Staff"
+to tourism_guest;
 
 GRANT SELECT, REFERENCES ON TABLE
 	public.subdivision, 
@@ -99,3 +103,17 @@ grant insert on table
 	public.order_,
 	public.supply
 	to tourism_client;
+
+
+
+WITH recursive way as (
+	select "ID_Route", "Route_name", "next_Attraction", "types of transport"."name_of_transport" , 1 as marsh_step from "Route"
+		join "types of transport" on "types of transport"."ID_transport"="transport delivered to the sights"
+		where "ID_Route"=3
+	UNION ALL
+
+	select "Route"."ID_Route", "Route"."Route_name", "Route"."next_Attraction", "types of transport"."name_of_transport" , way.marsh_step + 1 as marsh_step from "Route"
+	join "types of transport" on "types of transport"."ID_transport"="transport delivered to the sights"
+	join way on way."next_Attraction" = "Route"."ID_Route"
+)
+ SELECT * FROM way;

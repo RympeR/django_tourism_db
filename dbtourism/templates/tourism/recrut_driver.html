@@ -6,9 +6,14 @@
     {% endblock %}
 {% block title %}Statistics{% endblock title %}
 {% block main_content %}
-    <form action="{% url 'user_insert_api' %}" method="post">
+<div id="mySidenav" class="sidenav">
+    <!-- <a href="javascript:void(0)" class="closebtn" style="color:white" onclick="closeNav()">X</a> -->
+    <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Register" class ="btn btn-success">
+        <input type="submit" value="Нанять водителя" class ="btn btn-success">
     </form>
+</div>
+{% if result != '' %}
+{% endif %}
 {% endblock main_content %}

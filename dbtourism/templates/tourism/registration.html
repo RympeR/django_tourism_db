@@ -5,9 +5,9 @@
 {% endblock %}
 {% block title %}Registration{% endblock title %}
 {% block main_content %}
-    <form action="{% url 'user_insert_api' %}" method="post">
+    <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Register" class ="btn btn-success">
+        <input type="submit" value="Зарегестрироваться" class ="btn btn-success">
     </form>
 {% endblock main_content %}

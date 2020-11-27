@@ -31,6 +31,7 @@ CREATE TABLE "Staff"(
 "passport_data"      char(60) NOT NULL,
 "Work_status"     char(24) NOT NULL,
 "The foremost place of work"    int,
+"role_user" varchar(30) not null,
 FOREIGN KEY ("The foremost place of work") REFERENCES "Transcending work");
 
 
@@ -158,7 +159,8 @@ insert into "Transcending work"("hired","quit","Past position","Kind of activity
 values ('2016-01-08 15:55:06', '2018-04-08 12:05:00', 'Менеджер', 'Работа в оФисе', 'По собственому желанию', 'Имеджин'),
 ('2016-01-08 15:55:06', '2018-04-08 12:05:00', 'Менеджер', 'Работа в оФисе', 'По собственому желанию', 'Имеджин');   
 
-insert into "Staff"("Full_name","Dolzhnost","employment_date","date_of_dismissal","salary","ID_number","Date_of_Birth","passport_data","Work_status","The foremost place of work") values ('Харитонов Максим Константинович','Директор','2016-01-20 14:00:00',NULL,15000,1,'1990-07-25 12:00:00','Код подразделения 477-004 Дата выдачи 25.06.2006','Работает',2),
+insert into "Staff"("Full_name","Dolzhnost","employment_date","date_of_dismissal","salary","ID_number","Date_of_Birth","passport_data","Work_status","The foremost place of work") values 
+('Харитонов Максим Константинович','Директор','2016-01-20 14:00:00',NULL,15000,1,'1990-07-25 12:00:00','Код подразделения 477-004 Дата выдачи 25.06.2006','Работает',2),
 ('Велев Марк Олегович','Менеджер','2016-05-20',NULL,5000,2,'1991-07-25','Код подразделения 477-774 Дата выдачи 25.04.2007','Работает',2),
 ('Харитонова Дарья Олеговна','Менеджер','2016-02-20',NULL,5500,3,'1992-08-25','Код подразделения 507-474 Дата выдачи 25.04.2010','Работает',NULL),
  ('Белый Ярослав Олегович','Менеджер','2018-04-20','2019-05-22',6000,4,'1980-08-25','Код подразделения 505-404 Дата выдачи 25.04.1990','Уволен',NULL),
@@ -256,3 +258,20 @@ WHERE "ID_Route" = 13;
 UPDATE "Route"
 SET "next_Attraction" = NULL
 WHERE "ID_Route" = 14;
+
+
+
+
+
+
+
+
+
+
+
+
+
+    alter table "Client" add column login text NOT NULL  DEFAULT 'c1';
+    alter table "Client" add column passw text NOT NULL  DEFAULT '123';
+    alter table "Client" add unique(login);
+

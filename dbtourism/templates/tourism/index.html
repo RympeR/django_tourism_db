@@ -1,16 +1,6 @@
-
-    {% extends 'base.html' %}
-
-    {% block style %}
-    {% comment %}
-        <link rel = "stylesheet" href = "{{ url_for('static',filename='css/Delete_Service.css') }}">
-    {% endcomment %}
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-    {% endblock %}
-{% block title %}Statistics{% endblock title %}
+{% extends 'base.html' %}
+{% block title %}Main Page{% endblock title %}
 {% block main_content %}
-    
-    {% for client in data %}
-        <div>{{ client.full_name }}</div>
-    {% endfor %}
+<div class="background">
+</div>
 {% endblock main_content %}

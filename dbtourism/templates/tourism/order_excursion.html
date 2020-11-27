@@ -1,25 +1,19 @@
 
-    {% extends 'base.html' %}
+{% extends 'base.html' %}
 
-    {% block style %}
-    <link rel = "stylesheet" href = "{{ url_for('static',filename='css/Delete_Service.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-    {% endblock %}
+{% block style %}
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+{% endblock %}
 {% block title %}Statistics{% endblock title %}
 {% block main_content %}
-    <div class = "intro">
-        <h1>���������� ���������</h1>
-<div class = "container">
+<div id="mySidenav" class="sidenav">
+    <!-- <a href="javascript:void(0)" class="closebtn" style="color:white" onclick="closeNav()">X</a> -->
     <form method="post">
-        <div class = "dws-input">
-        <input type = "text" name = "name" placeholder = "�������� ������:">
-        </div>
-        <button class = "dws-submit2" type = "submit" name = "submit" value = "Report">�������� ������ �����</button>
-        <br />
-        <br />
-        <br />
-        <a class = "restore" href = "/client/{{username}}">�����</a>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Записаться на экскурсию" class ="btn btn-success">
     </form>
 </div>
-</div>    
+{% if result != '' %}
+{% endif %}
 {% endblock main_content %}

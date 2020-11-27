@@ -1,25 +1,43 @@
-
-    {% extends 'base.html' %}
-
-    {% block style %}
-    <link rel = "stylesheet" href = "{{ url_for('static',filename='css/Delete_Service.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-    {% endblock %}
-{% block title %}Statistics{% endblock title %}
+{% extends "base.html" %}
+{% block title %}
+{% endblock title %}
+{% block header %}
+    {% include "logined_header.html" %}
+{% endblock header %}
+{% block custom_css %}
+<style>
+    p{
+        color:white;
+    };
+    .form-control{
+        max-width: 150px;
+        position: absolute;
+    }
+</style>
+{% endblock custom_css %}
 {% block main_content %}
-    <div class = "intro">
-        <h1>���������� ���������</h1>
-<div class = "container">
-    <form method="post">
-        <div class = "dws-input">
-        <input type = "text" name = "name" placeholder = "�������� ������:">
-        </div>
-        <button class = "dws-submit2" type = "submit" name = "submit" value = "Report">�������� ������ �����</button>
-        <br />
-        <br />
-        <br />
-        <a class = "restore" href = "/client/{{username}}">�����</a>
-    </form>
-</div>
-</div>    
+{% if staff != '' %}
+    <table class="table table-dark">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">ФИО</th>
+                <th scope="col">Должность</th>
+                <th scope="col">Зарплата</th>
+                <th scope="col">Дата рожждения</th>
+                <th scope="col">Данные паcпорта</th>
+            </tr>
+        </thead>
+        {% for row in staff %}
+            <tr>
+                <th>{{ row.full_name }}</th>
+                <th>{{ row.dolzhnost }}</th>
+                <th>{{ row.salary }}</th>
+                <th>{{ row.date_of_birth }}</th>
+                <th>{{ row.passport_data }}</th>
+            </tr>          
+        {% endfor %}
+    </table>
+{% endif %}
 {% endblock main_content %}
+{% block side_script %}
+{% endblock side_script %}
