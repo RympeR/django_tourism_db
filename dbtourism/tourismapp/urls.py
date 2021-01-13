@@ -21,6 +21,8 @@ urlpatterns = [
     path('add_sight/<str:username>/', add_sight, name='add_service'),
     path('create_way/<str:username>/', create_way, name='create_way'),
     path('order_excursion/<str:username>/', order_excursion, name='order_excursion'),
+    path('get_excursions_list/<str:username>/', get_excursion_list, name='order_excursion'),
+    path('add_transcending_work/<str:username>/', add_transcending, name='add_transcending'),
     
     path('client/<str:username>/', client, name='client'),
     path('manager/<str:username>/', manager, name='manager'),

@@ -35,7 +35,7 @@ class Client(models.Model):
 class KlientRaspisanie(models.Model):
     # Field name made lowercase.
     id_client = models.OneToOneField(
-        Client, models.DO_NOTHING, db_column='ID_Client', primary_key=True)
+        'Client', models.DO_NOTHING, db_column='ID_Client', primary_key=True)
     # Field name made lowercase.
     id_excursion = models.ForeignKey(
         'Excursion', models.DO_NOTHING, db_column='ID_excursion')
@@ -49,7 +49,7 @@ class KlientRaspisanie(models.Model):
         verbose_name_plural = "KlientRaspisanie"
 
     def __str__(self):
-        return self.date + ' :: ' + str(self.id_client) + ' :: ' + str(self.id_excursion)
+        return str(self.date) + ' :: ' + str(self.id_client) + ' :: ' + str(self.id_excursion)
 
 
 class Route(models.Model):
@@ -76,7 +76,7 @@ class Route(models.Model):
         verbose_name_plural = 'Routes'
 
     def __str__(self):
-        return str(self.id_route) + self.route_name
+        return str(self.route_name) + ' - ' + str(self.location_on_the_route)
 
 
 class Staff(models.Model):
@@ -112,7 +112,7 @@ class Staff(models.Model):
         verbose_name_plural = 'Staff'
 
     def __str__(self):
-        return self.full_name
+        return self.full_name + ' ' + self.dolzhnost
 
 
 class StaffExcursion(models.Model):
@@ -157,7 +157,7 @@ class TranscendingWork(models.Model):
         verbose_name_plural = "TranscendingWork's"
 
     def __str__(self):
-        return self.organization + ' :: ' + self.past_position
+        return self.organization + ' - ' + self.past_position
 
 
 class Attraction(models.Model):
@@ -181,7 +181,7 @@ class Attraction(models.Model):
 
 class Excursion(models.Model):
     # Field name made lowercase.
-    id_excursion = models.AutoField(db_column='ID_excursion', primary_key=True)
+    id_excursion = models.AutoField(verbose_name='Номер экускурсии', db_column='ID_excursion', primary_key=True)
     # Field name made lowercase. This field type is a guess.
     price = models.TextField(db_column='Price')
     start_of_route = models.ForeignKey(
@@ -196,7 +196,7 @@ class Excursion(models.Model):
         verbose_name_plural = "Excursion's"
 
     def __str__(self):
-        return str(self.id_excursion) + str(self.start_of_route)
+        return str(self.start_of_route)
 
 
 class Timetable(models.Model):

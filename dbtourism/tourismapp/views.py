@@ -33,14 +33,30 @@ def registration(request):
     if request.method == 'POST':
         form = ClientForm(request.POST)
         if form.is_valid():
-            client = Client(
+            client_ = Client(
                 contact_details=form.cleaned_data['contact_details'],
                 full_name=form.cleaned_data['full_name'],
                 login=form.cleaned_data['login'],
                 passw=form.cleaned_data['passw'],
                 date_of_registration=datetime.today().strftime('%Y-%m-%d')
             )
-            client.save()
+            client_.save()
+            request.session['username'] = request.POST['login']
+            request.session['password'] = request.POST['passw']
+            username = request.POST['login']
+            password = request.POST['passw']
+            try:
+                query = f"""SELECT "ID_Client" FROM "Client" WHERE login = '{username}' AND passw = '{password}' ;"""
+                print(query)
+                request.session['login'] = execute_select_query('tourism_guest', 'guest', query,f_all=False)[0]
+                print(request.session['login'])
+                if request.session['login'] > 0:
+                    request.session['username'] = username
+                    role = 'tourism_client:client'
+                    return redirect(client, username=request.session['username'])
+            except Exception as e:
+                print(e)
+                return render(request, 'tourism/registration.html')
     context = {
         "form": ClientForm
     } 
@@ -60,6 +76,9 @@ def login(request):
         elif request.session['login'] == 'gid':
             role = 'tourism_staff:staff'
             return redirect(gid, username=request.session['username'])
+        elif request.session['login'] == 'manager':
+            role = 'tourism_staff:staff'
+            return redirect(manager, username=request.session['username'])
         elif request.session['login'] == 'director':
             role = 'tourism_director:director'
             return redirect(director, username=request.session['username'])
@@ -101,7 +120,7 @@ def login(request):
                     return redirect(client, username=request.session['username'])
             except Exception as e:
                 print(e)
-                return render(request, 'tourism/registration.html')
+                return render(request, 'tourism/login.html')
 
     return render(request, 'tourism/login.html')
 
@@ -112,40 +131,46 @@ def logout(request):
 #STAFF PAGES
 def client(request, username):
     if 'username' not in request.session or request.session['username'] != username:
-        return HttpResponse('Unauthorized', status=401)
+        return render(request, 'tourism/login.html')
     client_data = Client.objects.get(login=username)
     context = {
         'username': username,
+        'position': 'клиент',
         'client': client_data
     } 
     return render(request, 'tourism/client.html', context=context)
 
 def gid(request, username):
     if 'username' not in request.session or request.session['username'] != username:
-        return HttpResponse('Unauthorized', status=401)
+        return render(request, 'tourism/login.html')
     gid = Staff.objects.get(login=username)
     context = {
         'username': username,
+        'position': 'Гид',
         'staff': gid
     } 
     return render(request, 'tourism/gid.html', context=context)
 
 def manager(request, username):
     if 'username' not in request.session or request.session['username'] != username:
-        return HttpResponse('Unauthorized', status=401)
+        return render(request, 'tourism/login.html')
     manager = Staff.objects.get(login=username)
     context = {
         'username': username,
+        'position': 'Мээнеджер',
         'staff': manager
     } 
     return render(request, 'tourism/manager.html', context=context)
 
+
+
 def director(request, username):
     if 'username' not in request.session or request.session['username'] != username:
-        return HttpResponse('Unauthorized', status=401)
+        return render(request, 'tourism/login.html')
     director = Staff.objects.get(login=username)
     context = {
         'username': username,
+        'position': 'Директор',
         'staff': director
     } 
     return render(request, 'tourism/director.html', context=context)
@@ -153,7 +178,10 @@ def director(request, username):
 #MANAGER
 def recrut_driver(request, username):
     if 'username' not in request.session or request.session['username'] != username:
-        return HttpResponse('Unauthorized', status=401)
+        return render(request, 'tourism/login.html')
+    context = {
+        'form': RecruitDriverForm
+    } 
     if request.method == 'POST':
         form = RecruitDriverForm(request.POST)
         if form.is_valid():
@@ -162,36 +190,35 @@ def recrut_driver(request, username):
                 id_excursion=form.cleaned_data['id_excursion']
             )
             staff_excursion.save()
-            return Response({'status': 'success'})
-    context = {
-        'form': RecruitDriverForm
-    } 
+            
+    
     return render(request, 'tourism/recrut_driver.html', context=context)
 
 def get_list(request, username):
     if 'username' not in request.session or request.session['username'] != username:
-        return HttpResponse('Unauthorized', status=401)
-    data = ''
+        return render(request, 'tourism/login.html')
+    data = Timetable.objects.all().values('day_of_the_week', 'start_time', 'end_time', 'excursion_numbers__price', 'excursion_numbers__start_of_route__route_name')
     if request.method == 'POST':
         form = GetListForm(request.POST)
         if form.is_valid():
             print('VALID')
-            data = Timetable.objects.filter(start_time__range=(form.cleaned_data['start_date'], form.cleaned_data['end_date']))
+            data = Timetable.objects.filter(start_time__range=(form.cleaned_data['start_date'], form.cleaned_data['end_date'])).values()
+            print(data.query)
         else:
             print(form)
     context = {
         'data':data,
         'form': GetListForm 
-    } 
+    }
     return render(request, 'tourism/get_list.html', context=context)
 
 def create_excursion(request, username):
     if 'username' not in request.session or request.session['username'] != username:
-        return HttpResponse('Unauthorized', status=401)
+        return render(request, 'tourism/login.html')
     if request.method == 'POST':
         form = ExcursionForm(request.POST)
         if form.is_valid():
-            excursion = Excursion(
+            excursion    = Excursion(
                 price=form.cleaned_data['price'],
                 start_of_route=form.cleaned_data['start_of_route'],
                 number_of_seats=form.cleaned_data['number_of_seats']
@@ -204,7 +231,7 @@ def create_excursion(request, username):
 
 def take_gid(request, username):
     if 'username' not in request.session or request.session['username'] != username:
-        return HttpResponse('Unauthorized', status=401)
+        return render(request, 'tourism/login.html')
     if request.method == 'POST':
         form = OrderGid(request.POST)
         if form.is_valid():
@@ -214,11 +241,31 @@ def take_gid(request, username):
     } 
     return render(request, 'tourism/take_gid.html', context=context)
 
+def add_transcending(request, username):
+    if 'username' not in request.session or request.session['username'] != username:
+        return render(request, 'tourism/login.html')
+    if request.method == 'POST':
+        form = TranscendingWorkForm(request.POST)
+        if form.is_valid():
+            if form.is_valid():
+                transwork = TranscendingWork(
+                    hired=form.cleaned_data['hired'],
+                    quited=form.cleaned_data['quited'],
+                    past_position=form.cleaned_data['past_position'],
+                    kind_of_activity=form.cleaned_data['kind_of_activity'],
+                    grounds_for_dismissal=form.cleaned_data['grounds_for_dismissal'],
+                    organization=form.cleaned_data['organization']
+                )
+                transwork.save()
+    context = {
+        'form': TranscendingWorkForm
+    } 
+    return render(request, 'tourism/add_transcending.html', context=context)
 
 #DIRECTOR
 def update_salary(request, username):
     if 'username' not in request.session or request.session['username'] != username:
-        return HttpResponse('Unauthorized', status=401)
+        return render(request, 'tourism/login.html')
     if request.method == 'POST':
         form = UpdateSalaryForm(request.POST)
         if form.is_valid():
@@ -230,7 +277,7 @@ def update_salary(request, username):
 
 def remove_staff(request, username):
     if 'username' not in request.session or request.session['username'] != username:
-        return HttpResponse('Unauthorized', status=401)
+        return render(request, 'tourism/login.html')
     if request.method == 'POST':
         form = RemoveStaffForm(request.POST)
         if form.is_valid():
@@ -243,7 +290,7 @@ def remove_staff(request, username):
 
 def get_staff_list(request, username):
     if 'username' not in request.session or request.session['username'] != username:
-        return HttpResponse('Unauthorized', status=401)
+        return render(request, 'tourism/login.html')
     context = {
         'staff': Staff.objects.filter(work_status='Работает')
     } 
@@ -251,7 +298,7 @@ def get_staff_list(request, username):
 
 def recruit_staff(request, username):
     if 'username' not in request.session or request.session['username'] != username:
-        return HttpResponse('Unauthorized', status=401)
+        return render(request, 'tourism/login.html')
     if request.method == 'POST':
         form = StaffForm(request.POST)
         if form.is_valid():
@@ -272,22 +319,23 @@ def recruit_staff(request, username):
 
 def update_excursion_price(request, username):
     if 'username' not in request.session or request.session['username'] != username:
-        return HttpResponse('Unauthorized', status=401)
+        return render(request, 'tourism/login.html')
     if request.method == 'POST':
+        form = UpdateExcursionPrcie(request.POST)
         if form.is_valid():
             Excursion.objects.filter(
                 id_excursion=form.cleaned_data['excursion'].id_excursion
             ).update(
                 price=form.cleaned_data['new_price']
-            ).save()
+            )
     context = {
-        'form': AddSightForm
+        'form': UpdateExcursionPrcie
     } 
     return render(request, 'tourism/update_excursion_price.html', context=context)
 
 def add_sight(request, username):
     if 'username' not in request.session or request.session['username'] != username:
-        return HttpResponse('Unauthorized', status=401)
+        return render(request, 'tourism/login.html')
     if request.method == 'POST':
         form = AddSightForm(request.POST)
 
@@ -305,7 +353,7 @@ def add_sight(request, username):
 #GID
 def create_way(request, username):
     if 'username' not in request.session or request.session['username'] != username:
-        return HttpResponse('Unauthorized', status=401)
+        return render(request, 'tourism/login.html')
     if request.method == 'POST':
         form = CreateWayForm(request.POST)
         if form.is_valid():
@@ -324,7 +372,7 @@ def create_way(request, username):
 #CLIENT
 def order_excursion(request, username):
     if 'username' not in request.session or request.session['username'] != username:
-        return HttpResponse('Unauthorized', status=401)
+        return render(request, 'tourism/login.html')
     if request.method == 'POST':
         form = ExcursionForm(request.POST)
         if form.is_valid():
@@ -339,6 +387,15 @@ def order_excursion(request, username):
     }
     return render(request, 'tourism/order_excursion.html', context=context)
 
+def get_excursion_list(request, username):
+    if 'username' not in request.session or request.session['username'] != username:
+        return render(request, 'tourism/login.html')
+    client_id = Client.objects.get(login=username).id_client
+    query = KlientRaspisanie.objects.filter(id_client=client_id).values('id_excursion__number_of_seats', 'id_client__full_name', 'id_excursion__price', 'date')
+    context = {
+        'excursions': query
+    } 
+    return render(request, 'tourism/get_excursions_list.html', context=context)
 
 class RecrutDriver(APIView):
 

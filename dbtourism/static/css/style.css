@@ -24,8 +24,8 @@ background-color: rgb(12, 12, 12);
     background-image:url('../img/sclass_back.jpg');
 }
 body{
-    background-image:url('../img/sclass_back_.png');
-    width:100%;
+    width: 100%;
+    background: rgba(18, 20, 26, 1);
 }
 .form-signin {
     width: 100%;
@@ -34,13 +34,18 @@ body{
     padding: 15px;
     margin: auto auto;
 }
-
+body {
+    background: url('../images/back_img.jpg');
+}
 a{
-    color:white;
+    color:white!important;
 }
 p{
-    color:white;
+    color:black!important;
 };
 .form-control{
     width: 30%
+}
+label{
+    color:white;
 }

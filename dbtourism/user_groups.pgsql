@@ -22,6 +22,14 @@ TO tourism_developer;
 GRANT SELECT, INSERT, UPDATE, DELETE, REFERENCES, TRIGGER ON ALL TABLES IN SCHEMA public
 TO tourism_director;
 
+
+GRANT SELECT, INSERT, UPDATE, DELETE, REFERENCES, TRIGGER ON ALL TABLES IN SCHEMA public
+TO tourism_staff;
+GRANT SELECT, INSERT, UPDATE, DELETE, REFERENCES, TRIGGER ON ALL TABLES IN SCHEMA public
+TO tourism_client;
+GRANT SELECT, INSERT, UPDATE, DELETE, REFERENCES, TRIGGER ON ALL TABLES IN SCHEMA public
+TO tourism_guest;
+
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO tourism_director;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO tourism_developer;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO tourism_staff;
@@ -33,10 +41,10 @@ GRANT CONNECT ON DATABASE tourism_db to tourism_staff;
 GRANT CONNECT ON DATABASE tourism_db to tourism_client;
 GRANT CONNECT ON DATABASE tourism_db to tourism_guest;
 ------------------------------------------------------------
-grant SELECT(login, passw, role_) ON TABLE staff
+grant SELECT(login, passw, role_user) ON TABLE "Staff"
 to tourism_guest;
 
-grant select on client_info to tourism_staff;
+grant select on "Client" to tourism_staff;
 
 grant SELECT("ID_Client", login, passw) ON TABLE "Client"
 to tourism_guest;
