@@ -49,7 +49,7 @@ class KlientRaspisanie(models.Model):
         verbose_name_plural = "KlientRaspisanie"
 
     def __str__(self):
-        return str(self.date) + ' :: ' + str(self.id_client) + ' :: ' + str(self.id_excursion)
+        return str(self.id_excursion)  + ' - ' +  str(self.date)
 
 
 class Route(models.Model):

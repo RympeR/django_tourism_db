@@ -125,3 +125,21 @@ WITH recursive way as (
 	join way on way."next_Attraction" = "Route"."ID_Route"
 )
  SELECT * FROM way;
+
+
+
+ CREATE OR REPLACE FUNCTION get_way(id_route int) RETURNS TABLE
+	(id_route int, route_name text, next_Attraction text, type_of_transport text, marsh_step int) as $$
+
+	WITH recursive way as (
+	select "ID_Route", "Route_name", "next_Attraction", "types of transport"."name_of_transport" , 1 as marsh_step from "Route"
+		join "types of transport" on "types of transport"."ID_transport"="transport delivered to the sights"
+		where "ID_Route"=id_route
+	UNION ALL
+
+	select "Route"."ID_Route", "Route"."Route_name", "Route"."next_Attraction", "types of transport"."name_of_transport" , way.marsh_step + 1 as marsh_step from "Route"
+	join "types of transport" on "types of transport"."ID_transport"="transport delivered to the sights"
+	join way on way."next_Attraction" = "Route"."ID_Route"
+)
+
+	$$ language sql;

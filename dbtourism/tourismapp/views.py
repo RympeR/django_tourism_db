@@ -22,7 +22,19 @@ role = ''
 
 #MAIN PAGE
 def index(request):
-    context={}
+    data = Timetable.objects.all().values('day_of_the_week', 'start_time', 'end_time', 'excursion_numbers__price', 'excursion_numbers__start_of_route__route_name')
+    if request.method == 'POST':
+        form = GetListForm(request.POST)
+        if form.is_valid():
+            print('VALID')
+            data = Timetable.objects.filter(start_time__range=(form.cleaned_data['start_date'], form.cleaned_data['end_date'])).values()
+            print(data.query)
+        else:
+            print(form)
+    context = {
+        'data':data,
+        'form': GetListForm 
+    }
     return render(request, 'tourism/index.html', context=context)
 
 session_variables = []

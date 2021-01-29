@@ -41,11 +41,10 @@ class AddSightForm(forms.Form):
 
 class RecruitDriverForm(forms.Form):
     id_staff = forms.ModelChoiceField(label='Водитель', queryset=Staff.objects.filter(dolzhnost='Водитель'), widget=forms.Select(attrs={'required': False, 'class': 'form-control', 'style': 'width:30%;'}))
-    id_excursion = forms.ModelChoiceField(label='Экскурсия', widget=forms.Select( attrs={'required': False, 'class': 'form-control', 'style': 'width:30%;'}),queryset=Excursion.objects.all())
+    id_excursion = forms.ModelChoiceField(label='Экскурсия', widget=forms.Select( attrs={'required': False, 'class': 'form-control', 'style': 'width:30%;'}),queryset=KlientRaspisanie.objects.all().distinct('id_excursion'))
 
 class CreateWayForm(forms.Form):
     route_name = forms.CharField(label='Название маршрута', max_length=160, widget=forms.TextInput(attrs={'required': False, 'class': 'form-control', 'style': 'width:30%;'}))
-    location_on_the_route = forms.ModelChoiceField(label='Локация', widget=forms.Select( attrs={'required': False, 'class': 'form-control', 'style': 'width:30%;'}),queryset=Attraction.objects.all())
     next_attraction =  forms.ModelChoiceField(label='Следующая локация', widget=forms.Select(attrs={'required': False, 'class': 'form-control', 'style': 'width:30%;'}),queryset=Route.objects.all())
     transition_time_in_minutes = forms.IntegerField(label='Время переезда',  widget=forms.NumberInput(attrs={'required': False, 'class': 'form-control', 'style': 'width:30%;'}))
     transport_delivered_to_the_sights = forms.ModelChoiceField(label='Вид транспорта', widget=forms.Select(attrs={'required': False, 'class': 'form-control', 'style': 'width:30%;'}),queryset=TypesOfTransport.objects.all() )
